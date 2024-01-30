@@ -53,8 +53,12 @@ const menuOpt = optName => {
 }
 
 const cut = () => {
-  const curInfo = getCurInfo()
-  copyStore.cut(curInfo.componentData)
+  if (curComponent.value) {
+    const curInfo = getCurInfo()
+    copyStore.cut(curInfo.componentData)
+  } else if (areaData.value.components.length) {
+    copyStore.cut()
+  }
   menuOpt('cut')
 }
 
@@ -163,7 +167,11 @@ const composeDivider = computed(() => {
           placement="right-start"
           popper-class="context-menu-details"
         >
-          <li>对齐</li>
+          <li>
+            <div>
+              <span>对齐</span><el-icon><ArrowRight /></el-icon>
+            </div>
+          </li>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item style="width: 118px" @click="alignment('left')"
@@ -250,7 +258,7 @@ const composeDivider = computed(() => {
 
       i {
         position: absolute;
-        left: 30px;
+        right: 0px;
         top: 50%;
         transform: translate(-50%, -50%);
       }
@@ -264,5 +272,6 @@ const composeDivider = computed(() => {
 
 .custom-divider {
   border-color: #434343 !important;
+  margin: 0px;
 }
 </style>

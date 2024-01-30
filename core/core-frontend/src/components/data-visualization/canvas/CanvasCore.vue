@@ -206,7 +206,9 @@ watch(
 watch(
   () => canvasStyleData.value,
   () => {
-    initWatermark()
+    nextTick(() => {
+      initWatermark()
+    })
   },
   { deep: true }
 )
@@ -497,6 +499,10 @@ const handleContextMenu = e => {
   // 组件处于编辑状态的时候 如富文本 不弹出右键菜单
   if (!curComponent.value || (curComponent.value && !curComponent.value.editing)) {
     contextmenuStore.showContextMenu({ top, left, position: 'canvasCore' })
+    const iconDom = document.getElementById('close-button')
+    if (iconDom) {
+      iconDom.click()
+    }
   }
 }
 
@@ -1379,7 +1385,7 @@ defineExpose({
     :id="mainDomId"
     ref="container"
     class="editor"
-    :class="{ edit: isEdit }"
+    :class="{ edit: isEdit, 'dashboard-editor': dashboardActive }"
     :style="editStyle"
     @contextmenu="handleContextMenu"
   >
@@ -1476,6 +1482,9 @@ defineExpose({
 </template>
 
 <style lang="less" scoped>
+.dashboard-editor {
+  min-height: 100%;
+}
 .editor {
   position: relative;
   margin: auto;
